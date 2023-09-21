@@ -16,7 +16,7 @@ namespace FirstAPIWeb.Controllers
         [HttpGet("Calculator/Sum")]
         public int Sum(int x, int y)
         {
-            return x + y+1000;
+            return x+y+1000;
         }
         // api/calculator/subtract?x=28&y=100
 
