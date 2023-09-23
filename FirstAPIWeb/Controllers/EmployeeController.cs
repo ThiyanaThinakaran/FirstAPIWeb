@@ -70,9 +70,6 @@ namespace FirstWebAPI.Controllers
                 ReportsTo = updatedEmployee.ReportsTo,
                 Title = updatedEmployee.Title
             };
-
-
-
             _repositoryEmployee.UpdateEmployee(employee);
         }
 
