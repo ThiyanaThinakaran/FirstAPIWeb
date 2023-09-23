@@ -34,7 +34,7 @@ namespace FirstAPIWeb.Models
         //    Console.WriteLine($"EntityState After SaveChanges :{es.GetDisplayName()}");
         //    return updatedEmployee;
         //}
-        public int UpadateEmployee(Employee modifiedEmployee)
+        public int UpdateEmployee(Employee modifiedEmployee)
         {
             EntityState es = _context.Entry(modifiedEmployee).State;
             Console.WriteLine($"EntityState B4Update:{es.GetDisplayName()}");

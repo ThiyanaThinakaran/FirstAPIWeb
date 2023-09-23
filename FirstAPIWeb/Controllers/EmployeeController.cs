@@ -22,7 +22,7 @@ namespace FirstWebAPI.Controllers
             List<Employee> employees = _repositoryEmployee.GetAllEmployees();
             return employees;
         }
-        [HttpGet("/GetEmployees")]
+        [HttpGet("/GetAllEmployees")]
         public IEnumerable<EmployeeViewModel> GetAllEmployees()
         {
             List<Employee> employees = _repositoryEmployee.GetAllEmployees();
@@ -56,20 +56,33 @@ namespace FirstWebAPI.Controllers
             _repositoryEmployee.AddNewEmployee(employee);
             return 1;
         }
-        [HttpPut]
-        public void EditEmployee(int id, [FromBody] Employee updatedEmployee)
+        [HttpPut("/EditEmployee")]
+        public void EditEmployee([FromBody] EmployeeViewModel updatedEmployee)
         {
-            updatedEmployee.EmployeeId = id;
-            // Ensure the ID in the URL matches the EmployeeId
-            _repositoryEmployee.UpadateEmployee(updatedEmployee);
+            Employee employee = new Employee()
+            {
+                EmployeeId = updatedEmployee.EmpID,
+                FirstName = updatedEmployee.FirstName,
+                LastName = updatedEmployee.LastName,
+                BirthDate = updatedEmployee.BirthDate,
+                HireDate = updatedEmployee.HireDate,
+                City = updatedEmployee.City,
+                ReportsTo = updatedEmployee.ReportsTo,
+                Title = updatedEmployee.Title
+            };
 
+
+
+            _repositoryEmployee.UpdateEmployee(employee);
         }
-        [HttpDelete]
+
+        [HttpDelete("/DeleteEmployee")]
         public int DeleteEmployee(int id)
         {
             _repositoryEmployee.DeleteEmployee(id);
             return 1;
         }
+
 
 
 
