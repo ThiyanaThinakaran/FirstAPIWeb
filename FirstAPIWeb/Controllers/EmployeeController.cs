@@ -1,8 +1,10 @@
-﻿using FirstAPIWeb.Controllers;
+﻿using FirstAPIWeb.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using FirstAPIWeb.Models;
-namespace FirstAPIWeb.Controllers
+
+
+
+namespace FirstWebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -13,46 +15,63 @@ namespace FirstAPIWeb.Controllers
         {
             _repositoryEmployee = repository;
         }
-        [HttpGet("/GetAllEmployees")]
+        [HttpGet]
         // GET: EmployeeController
+        public List<Employee> GetEmployees()
+        {
+            List<Employee> employees = _repositoryEmployee.GetAllEmployees();
+            return employees;
+        }
+        [HttpGet("/GetEmployees")]
         public IEnumerable<EmployeeViewModel> GetAllEmployees()
         {
-            List<Employee> employees = _repositoryEmployee.GetAllEmployee();
-            var emplist = (from emp in employees
-                           select new EmployeeViewModel()
-                           {
-                               EmpID = emp.EmployeeId,
-                               FirstName = emp.FirstName,
-                               LastName = emp.LastName,
-                               BirthDate = (DateTime)emp.BirthDate,
-                               HireDate = (DateTime)emp.HireDate,
-                               Title = emp.Title,
-                               City = emp.City,
-                               ReportsTo = (int)emp.ReportsTo
-                           }
-                           ).ToList();
-            
-            return emplist;
+            List<Employee> employees = _repositoryEmployee.GetAllEmployees();
+            var empList = (
+                from emp in employees
+                select new EmployeeViewModel()
+                {
+                    EmpID = emp.EmployeeId,
+                    FirstName = emp.FirstName,
+                    LastName = emp.LastName,
+                    BirthDate = emp.BirthDate,
+                    HireDate = emp.HireDate,
+                    Title = emp.Title,
+                    City = emp.City,
+                    ReportsTo = emp.ReportsTo
+                }
+                ).ToList();
+            return empList;
         }
         [HttpPost]
         public Employee EmployeeDetails(int id)
         {
+            //Customer customer = _repositoryCustomers.FindCustomerById(id);
+            //return View(customer);
             Employee employees = _repositoryEmployee.GetEmployeeId(id);
             return employees;
         }
+        [HttpPost("/AddNewEmployee")]
+        public int AddNewEmployee([FromBody] Employee employee)
+        {
+            _repositoryEmployee.AddNewEmployee(employee);
+            return 1;
+        }
         [HttpPut]
-        public Employee EditEmployee(int id,[FromBody] Employee updatedEmployee)
+        public void EditEmployee(int id, [FromBody] Employee updatedEmployee)
         {
             updatedEmployee.EmployeeId = id;
-            Employee savedEmployee = _repositoryEmployee.UpdateEmployee(updatedEmployee);
-            return savedEmployee;
+            // Ensure the ID in the URL matches the EmployeeId
+            _repositoryEmployee.UpadateEmployee(updatedEmployee);
+
         }
         [HttpDelete]
-        public Employee Delete(int id, [FromBody] Employee deleteEmployeeData)
+        public int DeleteEmployee(int id)
         {
-            deleteEmployeeData.EmployeeId = id;
-            Employee savedEmployee = _repositoryEmployee.DeleteEmployee(deleteEmployeeData);
-            return savedEmployee;
+            _repositoryEmployee.DeleteEmployee(id);
+            return 1;
         }
+
+
+
     }
 }
